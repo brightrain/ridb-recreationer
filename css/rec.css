@@ -1,0 +1,64 @@
+@import "http://fonts.googleapis.com/css?family=Open+Sans:400,600'";
+
+html, body {
+  	width:100%;
+  	height: 100%;
+	padding:0;
+	margin:0;
+}
+body {
+	font-size: 75%;	
+	font-family: 'Open Sans', sans-serif  !important;
+}
+#map
+{
+	width: 100%;
+	height: 100%;
+}
+#legend
+{
+    position:absolute;
+    z-index:999;
+    left:5px;
+    bottom:10px;
+    opacity:0.8;
+    background-color:whitesmoke;
+    border:1px solid black;
+    padding:5px;
+}
+#mapLoading
+{
+    position:absolute;
+    z-index:999;
+    right:15px;
+    bottom:20px;
+    opacity:0.8;
+    background-color:whitesmoke;
+    padding:3px;
+}
+#mapNotice
+{
+    position:absolute;
+    z-index:999;
+    right:15px;
+    bottom:40px;
+    opacity:0.8;
+    background-color:whitesmoke;
+    padding:3px;
+}
+#loading
+{
+	width: 100%;
+	height: 100%;
+	opacity: 0.5;
+	margin: 0;
+	padding: 0;
+	background: #fff url("../images/loading-big.gif") no-repeat center center;
+	position: absolute;
+	z-index: 999;
+}
+.divider
+{
+    border-bottom: 1px dotted darkgray;
+    padding:5px;
+}
