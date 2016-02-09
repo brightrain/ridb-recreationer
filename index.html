@@ -27,11 +27,11 @@
             <h5 class="divider"><img src='images/icon-fish.png'><b class='pull-right'>Fishing Access</b></h5>
             <h5 class="divider"><img src='images/icon-ski.png'><b class='pull-right'>Ski Area</b></h5>
             <h5 class="divider"><img src='images/icon-map-marker.png'><b class='pull-right'>Other</b></h5>
-            <h4><span>zoom level: </span><span id="mapZoomLevel"></span><span></span></h4>
-            <h4><span>search radius: </span><span id="radius"></span><span>   miles</span></h4>
-            <h4><span id="facilityCount"></span><span>   facilities</span></h4>
+            <div id="facilityCountContainer"><span id="facilityCount"></span><span>   facilities</span></div>
+            <!--<h4><span>zoom level: </span><span id="mapZoomLevel"></span><span></span></h4>-->
+            <div id="searchRadius"><span>search radius: </span><span id="radius"></span><span>   miles</span></div>
         </div>
-        <div id="mapNotice"><b> Additional Facilities available. Zoom in to see more.</b></div>
-        <div id="mapLoading"><img src="images/loading.gif"><b> Loading Recreation Facilities...</b></div>
+        <div id="mapNotice"></div>
+        <div id="mapLoading"><img src="images/loading.gif"><b id="mapLoadingText"> Loading Recreation Facilities...</b></div>
     </body>
 </html>

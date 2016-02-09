@@ -26,6 +26,23 @@ body {
     border:1px solid black;
     padding:5px;
 }
+#facilityCountContainer
+{
+    margin: 20px;
+    font-weight:900;
+}
+#facilityCount
+{
+    border: 2px dashed #006400;
+    border-radius: 36px;
+    padding: 12px;
+    margin: 20px;
+}
+#searchRadius
+{
+    font-size: 10px;
+    font-style: oblique;
+}
 #mapLoading
 {
     position:absolute;

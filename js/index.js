@@ -13,27 +13,27 @@
         var recFacilities = null;
         var icons = {
             campground: L.icon({
-                iconUrl: '../images/icon-camp.png',
+                iconUrl: 'images/icon-camp.png',
                 iconSize:     [25, 19]
             }),
             trail: L.icon({
-                iconUrl: '../images/icon-trail.png',
+                iconUrl: 'images/icon-trail.png',
                 iconSize:     [25, 40]
             }),
             ski: L.icon({
-                iconUrl: '../images/icon-ski.png',
+                iconUrl: 'images/icon-ski.png',
                 iconSize:     [50, 42]
             }),
             picnic: L.icon({
-                iconUrl: '../images/icon-picnic.png',
+                iconUrl: 'images/icon-picnic.png',
                 iconSize:     [30, 20]
             }),
             fish: L.icon({
-                iconUrl: '../images/icon-fish.png',
+                iconUrl: 'images/icon-fish.png',
                 iconSize:     [28, 30]
             }),
             default: L.icon({
-                iconUrl: '../images/icon-map-marker.png',
+                iconUrl: 'images/icon-map-marker.png',
                 iconSize:     [23, 34]
             })
         }
@@ -42,7 +42,7 @@
             center: [40.6, -105.4],
             zoom: 11
         });
-        $("#mapZoomLevel").html("20");
+        //$("#mapZoomLevel").html("20");
         var searchRadiusCircle = L.circle(map.getCenter(), 0, { fill:false, color:"#006400", weight:3, dashArray:"5, 5"}).addTo(map);
         
         var imageryBasemapLayer = new L.TileLayer(config.basemapUrl, {
@@ -60,7 +60,7 @@
             // since the max number of facilities returned is 50 we need to manage the search radius
             // according to the current zoom level
             var zoomLevel = map.getZoom();
-            $("#mapZoomLevel").html(zoomLevel);
+            //$("#mapZoomLevel").html(zoomLevel);
             $("#mapNotice").hide();
             var radius = 20;
             if(zoomLevel >= 16) {
@@ -76,68 +76,93 @@
                 radius = 30;
             }
             else if(zoomLevel < 10) {
-                radius = 40;
+                radius = 100;
             }
             getFacilities(radius);
         });
             
         function getFacilities(radius) {
             $("#mapLoading").show();
+            $("#mapLoadingText").text(" Loading Recreation Facilities...");
             var ll = map.getCenter();
             searchRadiusCircle
                 .setRadius(radius * 1609.34)
                 .setLatLng(ll);
             
             $("#radius").html(radius);
-            
+            var offset = 0;
             var url = config.recFacilitiesBaseUrl + "latitude=" + ll.lat + "&longitude=" + ll.lng + "&radius=" + radius.toString() +
                 "&apikey=" + config.recAPIKey;
             $.getJSON(url, function(data) {
+                if(data.METADATA.RESULTS.TOTAL_COUNT > data.METADATA.RESULTS.CURRENT_COUNT) {
+                    offset += data.METADATA.RESULTS.CURRENT_COUNT;
+                    getMoreFacilities(url, offset);
+                }
                 if(data.RECDATA.length == 50) {
                     $("#mapNotice").show();
-                    $("#facilityCount").html(data.RECDATA.length.toString() + "+");
+                    $("#facilityCount").html(data.METADATA.RESULTS.TOTAL_COUNT);
                 }
                 else {
                     $("#mapNotice").hide();
-                    $("#facilityCount").html(data.RECDATA.length);
+                    $("#facilityCount").html(data.METADATA.RESULTS.TOTAL_COUNT);
                 }
                 recFacilities.clearLayers();
                 facilitiesLayer.clearLayers();
-                data.RECDATA.forEach(function(facility) {
-                    var ll = L.latLng(facility.FacilityLatitude, facility.FacilityLongitude);
-                    var icon, img;
-                    //console.log(facility.FacilityName + " | " + facility.FacilityTypeDescription);
-                    if(facility.FacilityName.toString().toLowerCase().indexOf("camp") != -1) {
-                        icon = icons.campground;
-                        img = "<img src='../images/icon-camp.png' />";
+                displayFacilities(data.RECDATA);
+                
+                function displayFacilities(facilities) {
+                    facilities.forEach(function(facility) {
+                        var ll = L.latLng(facility.FacilityLatitude, facility.FacilityLongitude);
+                        var icon, img;
+                        //console.log(facility.FacilityName + " | " + facility.FacilityTypeDescription);
+                        if(facility.FacilityName.toString().toLowerCase().indexOf("camp") != -1) {
+                            icon = icons.campground;
+                            img = "<img src='images/icon-camp.png' />";
+                        }
+                        else if(facility.FacilityName.toString().toLowerCase().indexOf("trail") != -1) {
+                            icon = icons.trail;
+                            img = "<img src='images/icon-trail.png' />";
+                        }
+                        else if(facility.FacilityName.toString().toLowerCase().indexOf("ski") != -1) {
+                            icon = icons.ski;
+                            img = "<img src='.images/icon-ski.png' />";
+                        }
+                        else if(facility.FacilityName.toString().toLowerCase().indexOf("picnic") != -1) {
+                            icon = icons.picnic;
+                            img = "<img src='images/icon-picnic.png' />";
+                        }
+                        else if(facility.FacilityName.toString().toLowerCase().indexOf("fish") != -1) {
+                            icon = icons.fish;
+                            img = "<img src='images/icon-fish.png' />";
+                        }
+                        else {
+                            icon = icons.default;
+                            img = "<img src='images/icon-map-marker.png' />";
+                        }
+                        L.marker(ll, {
+                            title: facility.FacilityName,
+                            icon: icon
+                        }).addTo(recFacilities)
+                        //}).addTo(facilitiesLayer)
+                        .bindPopup(img + "<h3>" + facility.FacilityName + "</h3>" + facility.FacilityDescription, {maxHeight: 400, autoPan: false});
+                    });
+                }
+                function getMoreFacilities(url, offset) {
+                    $("#mapLoading").show();
+                    $("#mapLoadingText").text(" Loading More Recreation Facilities...");    
+                    $.getJSON(url + "&offset=" + offset, function(data) {
+                            if(offset < data.METADATA.RESULTS.TOTAL_COUNT) {
+                                offset += data.METADATA.RESULTS.CURRENT_COUNT;
+                                getMoreFacilities(url, offset);
+                            }
+                            else {
+                                $("#mapLoading").hide();   
+                            }
+                            displayFacilities(data.RECDATA);
+                    }).then(function() {
+                        //$("#mapLoading").hide();
+                    });
                     }
-                    else if(facility.FacilityName.toString().toLowerCase().indexOf("trail") != -1) {
-                        icon = icons.trail;
-                        img = "<img src='../images/icon-trail.png' />";
-                    }
-                    else if(facility.FacilityName.toString().toLowerCase().indexOf("ski") != -1) {
-                        icon = icons.ski;
-                        img = "<img src='../images/icon-ski.png' />";
-                    }
-                    else if(facility.FacilityName.toString().toLowerCase().indexOf("picnic") != -1) {
-                        icon = icons.picnic;
-                        img = "<img src='../images/icon-picnic.png' />";
-                    }
-                    else if(facility.FacilityName.toString().toLowerCase().indexOf("fish") != -1) {
-                        icon = icons.fish;
-                        img = "<img src='../images/icon-fish.png' />";
-                    }
-                    else {
-                        icon = icons.default;
-                        img = "<img src='../images/icon-map-marker.png' />";
-                    }
-                    L.marker(ll, {
-                        title: facility.FacilityName,
-                        icon: icon
-                    }).addTo(recFacilities)
-                    //}).addTo(facilitiesLayer)
-                    .bindPopup(img + "<h3>" + facility.FacilityName + "</h3>" + facility.FacilityDescription, {maxHeight: 400});
-                });
             }).then(function() {
                 $("#mapLoading").hide();
             });
