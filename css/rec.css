@@ -15,6 +15,14 @@ body {
     #legend {
         display: none;
     }
+    #mapLoading {
+        left: 30% !important;   
+    }
+}
+@media (max-width: 360px) {
+    #mapLoading {
+        left: 10% !important;   
+    }
 }
 #map
 {
@@ -53,7 +61,7 @@ body {
 {
     position:absolute;
     z-index:999;
-    left:45%;
+    left:40%;
     top:49%;
     opacity:0.85;
     background-color:whitesmoke;
