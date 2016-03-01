@@ -12,23 +12,27 @@
         <link rel="stylesheet" href="css/leaflet/MarkerCluster.Default.css" />
         <link rel="stylesheet" href="css/leaflet/MarkerCluster.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.4.0/leaflet-geocoder-mapzen.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/leaflet.locatecontrol/0.48.0/L.Control.Locate.min.css">
             
 		<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
         <script src="js/leaflet.js"></script>
         <script src="js/leaflet.markercluster.js" type="text/javascript"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.4.0/leaflet-geocoder-mapzen.js"></script>
+        <!--https://github.com/domoritz/leaflet-locatecontrol-->
+        <script src="https://cdn.jsdelivr.net/leaflet.locatecontrol/0.48.0/L.Control.Locate.min.js"></script>
         <script src="js/index.js" type="text/javascript"></script>
     </head>
     <body>
 		<div id="map"></div>
         <div id="legend">
             <h5 class="divider"><img src='images/icon-camp.png'><b class='pull-right'>Camp Site</b></h5>
-            <span class="divider"></span>
             <h5 class="divider"><img src='images/icon-trail.png'><b class='pull-right'>Trailhead</b></h5>
             <h5 class="divider"><img src='images/icon-picnic.png'><b class='pull-right'>Picnic Site</b></h5>
             <h5 class="divider"><img src='images/icon-fish.png'><b class='pull-right'>Fishing Access</b></h5>
             <h5 class="divider"><img src='images/icon-ski.png'><b class='pull-right'>Ski Area</b></h5>
             <h5 class="divider"><img src='images/icon-map-marker.png'><b class='pull-right'>Other</b></h5>
+            <!--<h5 class="divider"><span id="clusterLegend">x  </span><b>Multiple Facilities Here</b></h5>-->
             <div id="facilityCountContainer"><span id="facilityCount"></span><span>   facilities</span></div>
             <!--<h4><span>zoom level: </span><span id="mapZoomLevel"></span><span></span></h4>-->
             <div id="searchRadius"><span>search radius: </span><span id="radius"></span><span>   miles</span></div>

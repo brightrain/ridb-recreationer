@@ -43,16 +43,27 @@ $(document).ready(function(){
 
     var map = L.map('map', {
         center: [40.6, -105.4],
-        zoom: 10
+        zoom: 10,
+        zoomControl: false
     });
+    new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
+    
     map.attributionControl.addAttribution("<span>Rec Facilities by<a href='http://usda.github.io/RIDB/' target='_blank'> Recreation.gov</a></span>");
     var geocoder = L.control.geocoder('search-RCzImpw', 
                                       { markers: {
                                           icon: L.icon({
-                                                iconUrl: 'images/icon-search-marker.png',
-                                                iconSize: [32, 32]
-        })
-                                      }}).addTo(map);
+                                              iconUrl: 'images/icon-search-marker.png',
+                                              iconSize: [32, 32] })
+                                      }})
+    .addTo(map);
+
+    L.control.locate({ 
+        icon: "fa fa-location-arrow",
+        drawCircle: false,
+        metric: false,
+        keepCurrentZoomLevel: true
+    }).addTo(map);
+
     //$("#mapZoomLevel").html("20");
     var searchRadiusCircle = L.circle(map.getCenter(), 0, { fill:false, color:"#006400", weight:3, dashArray:"5, 5"}).addTo(map);
 
@@ -157,28 +168,28 @@ $(document).ready(function(){
                     L.marker(ll, {
                         title: facility.FacilityName,
                         icon: icon
-                    //}).addTo(recFacilities)
+                        //}).addTo(recFacilities)
                     }).addTo(facilitiesLayer)
-                    .bindPopup(img + "<h3>" + facility.FacilityName + "</h3>" + facility.FacilityDescription, 
-                               { maxHeight: 400, autoPan: false, offset: [0, -15] });
+                        .bindPopup(img + "<h3>" + facility.FacilityName + "</h3>" + facility.FacilityDescription, 
+                                   { maxHeight: 400, autoPan: false, offset: [0, -15] });
                 });
             }
             function getMoreFacilities(url, offset) {
                 $("#mapLoading").show();
                 $("#mapLoadingText").text(" Loading More Recreation Facilities...");    
                 $.getJSON(url + "&offset=" + offset, function(data) {
-                        if(offset < data.METADATA.RESULTS.TOTAL_COUNT) {
-                            offset += data.METADATA.RESULTS.CURRENT_COUNT;
-                            getMoreFacilities(url, offset);
-                        }
-                        else {
-                            $("#mapLoading").hide();   
-                        }
-                        displayFacilities(data.RECDATA);
+                    if(offset < data.METADATA.RESULTS.TOTAL_COUNT) {
+                        offset += data.METADATA.RESULTS.CURRENT_COUNT;
+                        getMoreFacilities(url, offset);
+                    }
+                    else {
+                        $("#mapLoading").hide();   
+                    }
+                    displayFacilities(data.RECDATA);
                 }).then(function() {
                     //$("#mapLoading").hide();
                 });
-                }
+            }
         }).then(function() {
             $("#mapLoading").hide();
         });

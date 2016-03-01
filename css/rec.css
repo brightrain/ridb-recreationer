@@ -10,6 +10,12 @@ body {
 	font-size: 75%;	
 	font-family: 'Open Sans', sans-serif  !important;
 }
+
+@media (max-width: 710px) {
+    #legend {
+        display: none;
+    }
+}
 #map
 {
 	width: 100%;
@@ -73,6 +79,25 @@ body {
 	background: #fff url("../images/loading-big.gif") no-repeat center center;
 	position: absolute;
 	z-index: 999;
+}
+#loading-small
+{
+	width: 13px;
+	height: 13px;
+	opacity: 0.5;
+	margin: 0;
+	padding: 0;
+	background: #fff url("../images/loading.gif") no-repeat center center;
+	position: absolute;
+	z-index: 999;
+}
+#clusterLegend
+{
+    background-color: rgba(110, 204, 57, 0.6);
+    text-align: center;
+    border-radius: 50px;
+    padding:5px;
+    margin-right:5px;
 }
 .divider
 {
